@@ -1,0 +1,20 @@
+PODS:
+  - AppLovinSDK (13.2.0)
+  - MaioSDK-v2 (2.1.6)
+
+DEPENDENCIES:
+  - AppLovinSDK
+  - MaioSDK-v2
+
+SPEC REPOS:
+  trunk:
+    - AppLovinSDK
+    - MaioSDK-v2
+
+SPEC CHECKSUMS:
+  AppLovinSDK: 1eb88a82b4feea9f3696ce9cc1e3343c4997ee12
+  MaioSDK-v2: 02780811845ba7dff080c9b92b6a5d29484ac777
+
+PODFILE CHECKSUM: 5e5bf365e93fff2df03488cde8ed382967c873fa
+
+COCOAPODS: 1.16.2
