@@ -1,7 +1,7 @@
 #import "AppLovinMaioMediationAdapter.h"
 #import <Maio/Maio-Swift.h>
 
-#define ADAPTER_VERSION @"1.0.0.0"
+#define ADAPTER_VERSION @"2.1.6.0.0"
 
 @interface AppLovinMaioMediationAdapterInterstitialAdDelegate : NSObject <MaioInterstitialLoadCallback, MaioInterstitialShowCallback>
 @property (nonatomic,   weak) AppLovinMaioMediationAdapter *parentAdapter;
