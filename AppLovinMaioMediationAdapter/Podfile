@@ -1,0 +1,6 @@
+platform :ios, '12.0'
+
+target 'AppLovinMaioMediationAdapter' do
+  pod 'AppLovinSDK'
+  pod 'MaioSDK-v2'
+end
