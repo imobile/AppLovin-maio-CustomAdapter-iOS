@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "AppLovinMaioMediationAdapter",
     platforms: [
-        .iOS(.v14)
+        .iOS(.v15)
     ],
     products: [
         .library(
@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/AppLovin/AppLovin-MAX-Swift-Package.git", from: "13.0.0"),
-        .package(url: "https://github.com/imobile/MaioSDK-v2-iOS.git", from: "2.1.6")
+        .package(url: "https://github.com/imobile/MaioSDK-v2-iOS.git", from: "2.2.0")
     ],
     targets: [
         .target(
