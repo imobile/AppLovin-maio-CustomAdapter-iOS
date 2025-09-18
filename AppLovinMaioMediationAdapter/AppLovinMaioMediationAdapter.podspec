@@ -6,7 +6,7 @@
 #  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/
 #
 
-adapter_version = "2.1.6.0.0"
+adapter_version = "2.2.0.0.0"
 
 Pod::Spec.new do |spec|
 
@@ -56,7 +56,7 @@ Pod::Spec.new do |spec|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  spec.ios.deployment_target = "14.0"
+  spec.ios.deployment_target = "15.0"
 
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -95,7 +95,7 @@ Pod::Spec.new do |spec|
   #  where they will only apply to your library. If you depend on other Podspecs
   #  you can include multiple dependencies to ensure it works.
 
-  spec.dependency "MaioSDK-v2", ">= 2.1.6"
+  spec.dependency "MaioSDK-v2", ">= 2.2.0"
   spec.dependency "AppLovinSDK", ">= 13.0.0"
 
 end
