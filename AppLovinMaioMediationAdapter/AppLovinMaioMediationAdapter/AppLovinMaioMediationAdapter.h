@@ -2,7 +2,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppLovinMaioMediationAdapter : ALMediationAdapter <MAInterstitialAdapter, MARewardedAdapter>
+@interface AppLovinMaioMediationAdapter : ALMediationAdapter <MAInterstitialAdapter, MARewardedAdapter, MAAdViewAdapter>
     
 @end
 

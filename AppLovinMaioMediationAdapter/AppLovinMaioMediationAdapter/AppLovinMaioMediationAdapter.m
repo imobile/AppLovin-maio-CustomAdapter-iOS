@@ -1,7 +1,7 @@
 #import "AppLovinMaioMediationAdapter.h"
 #import <Maio/Maio-Swift.h>
 
-#define ADAPTER_VERSION @"2.1.6.0.0"
+#define ADAPTER_VERSION @"2.2.0.0.0"
 
 @interface AppLovinMaioMediationAdapterInterstitialAdDelegate : NSObject <MaioInterstitialLoadCallback, MaioInterstitialShowCallback>
 @property (nonatomic,   weak) AppLovinMaioMediationAdapter *parentAdapter;
@@ -16,12 +16,20 @@
 - (instancetype)initWithParentAdapter:(AppLovinMaioMediationAdapter *)parentAdapter andNotify:(id<MARewardedAdapterDelegate>)delegate;
 @end
 
+@interface AppLovinMaioMediationAdapterBannerAdDelegate : NSObject <MaioBannerDelegate>
+@property (nonatomic,   weak) AppLovinMaioMediationAdapter *parentAdapter;
+@property (nonatomic, strong) id<MAAdViewAdapterDelegate> delegate;
+- (instancetype)initWithParentAdapter:(AppLovinMaioMediationAdapter *)parentAdapter andNotify:(id<MAAdViewAdapterDelegate>)delegate;
+@end
+
 @interface AppLovinMaioMediationAdapter ()
 @property (nonatomic, strong) MaioInterstitial *interstitialAd;
 @property (nonatomic, strong) MaioRewarded *rewardedAd;
+@property (nonatomic, strong) MaioBannerView *bannerView;
 
 @property (nonatomic, strong) AppLovinMaioMediationAdapterInterstitialAdDelegate *interstitialAdDelegate;
 @property (nonatomic, strong) AppLovinMaioMediationAdapterRewardedAdDelegate *rewardedAdDelegate;
+@property (nonatomic, strong) AppLovinMaioMediationAdapterBannerAdDelegate *bannerAdDelegate;
 @end
 
 @implementation AppLovinMaioMediationAdapter
@@ -149,6 +157,22 @@
     }
 }
 
+#pragma mark - MAAdViewAdapter Methods
+
+- (void)loadAdViewAdForParameters:(nonnull id<MAAdapterResponseParameters>)parameters adFormat:(nonnull MAAdFormat *)adFormat andNotify:(nonnull id<MAAdViewAdapterDelegate>)delegate
+{
+    NSString *zoneID = parameters.thirdPartyAdPlacementIdentifier;
+    [self log: @"Loading banner ad: %@...", zoneID];
+
+    self.bannerAdDelegate = [[AppLovinMaioMediationAdapterBannerAdDelegate alloc] initWithParentAdapter: self andNotify: delegate];
+    self.bannerView = [[MaioBannerView alloc] initWithZoneId: zoneID size: [AppLovinMaioMediationAdapter toMaioSize: adFormat]];
+    self.bannerView.delegate = self.bannerAdDelegate;
+    self.bannerView.rootViewController = parameters.presentingViewController ?: [ALUtils topViewControllerFromKeyWindow];
+    self.bannerView.translatesAutoresizingMaskIntoConstraints = NO;
+
+    [self.bannerView loadWithTestMode:[parameters isTesting] bidData:nil];
+}
+
 #pragma mark - Helper functions
 
 + (MAAdapterError *)toMaxError:(NSInteger)maioErrorCode
@@ -229,6 +253,17 @@
                   thirdPartySdkErrorCode: maioErrorCode
                thirdPartySdkErrorMessage: maioErrorMessage];
 #pragma clang diagnostic pop
+}
+
++ (MaioBannerSize *)toMaioSize:(MAAdFormat *)format
+{
+    if (format == MAAdFormat.banner) {
+        return MaioBannerSize.banner;
+    } else if (format == MAAdFormat.mrec) {
+        return MaioBannerSize.mediumRectangle;
+    } else {
+        return nil;
+    }
 }
 
 @end
@@ -372,6 +407,57 @@
     
     [self.parentAdapter log: @"Rewarded ad hidden: %@", ad.request.zoneId];
     [self.delegate didHideRewardedAd];
+}
+
+@end
+
+@implementation AppLovinMaioMediationAdapterBannerAdDelegate
+
+- (instancetype)initWithParentAdapter:(AppLovinMaioMediationAdapter *)parentAdapter andNotify:(id<MAAdViewAdapterDelegate>)delegate
+{
+    self = [super init];
+    if ( self )
+    {
+        self.parentAdapter = parentAdapter;
+        self.delegate = delegate;
+    }
+    return self;
+}
+
+- (void)didLoad:(MaioBannerView *)ad
+{
+    [self.parentAdapter log: @"Banner ad loaded: %@", ad.zoneId];
+    [self.delegate didLoadAdForAdView:ad];
+}
+
+- (void)didFailToLoad:(MaioBannerView *)ad errorCode:(NSInteger)errorCode
+{
+    [self.parentAdapter log: @"Banner ad failed to load with error: %@", errorCode];
+    [self.delegate didFailToLoadAdViewAdWithError:[AppLovinMaioMediationAdapter toMaxError:errorCode]];
+}
+
+- (void)didMakeImpression:(MaioBannerView *)ad
+{
+    [self.parentAdapter log: @"Banner ad shown: %@", ad.zoneId];
+    [self.delegate didDisplayAdViewAd];
+}
+
+- (void)didClick:(MaioBannerView *)ad
+{
+    [self.parentAdapter log: @"Banner ad clicked: %@", ad.zoneId];
+    [self.delegate didClickAdViewAd];
+}
+
+- (void)didLeaveApplication:(MaioBannerView *)ad
+{
+    [self.parentAdapter log: @"Banner ad hidden: %@", ad.zoneId];
+    [self.delegate didHideAdViewAd];
+}
+
+- (void)didFailToShow:(MaioBannerView *)ad errorCode:(NSInteger)errorCode
+{
+    [self.parentAdapter log: @"Banner ad failed to show with error: %@", errorCode];
+    [self.delegate didFailToDisplayAdViewAdWithError:[AppLovinMaioMediationAdapter toMaxError:errorCode]];
 }
 
 @end
