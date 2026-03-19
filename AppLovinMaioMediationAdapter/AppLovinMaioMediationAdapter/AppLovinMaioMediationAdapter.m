@@ -432,8 +432,9 @@
 
 - (void)didFailToLoad:(MaioBannerView *)ad errorCode:(NSInteger)errorCode
 {
-    [self.parentAdapter log: @"Banner ad failed to load with error: %@", errorCode];
-    [self.delegate didFailToLoadAdViewAdWithError:[AppLovinMaioMediationAdapter toMaxError:errorCode]];
+    MAAdapterError *adapterError = [AppLovinMaioMediationAdapter toMaxError:errorCode];
+    [self.parentAdapter log: @"Banner ad failed to load with error: %@", adapterError];
+    [self.delegate didFailToLoadAdViewAdWithError:adapterError];
 }
 
 - (void)didMakeImpression:(MaioBannerView *)ad
@@ -456,8 +457,9 @@
 
 - (void)didFailToShow:(MaioBannerView *)ad errorCode:(NSInteger)errorCode
 {
-    [self.parentAdapter log: @"Banner ad failed to show with error: %@", errorCode];
-    [self.delegate didFailToDisplayAdViewAdWithError:[AppLovinMaioMediationAdapter toMaxError:errorCode]];
+    MAAdapterError *adapterError = [AppLovinMaioMediationAdapter toMaxError:errorCode];
+    [self.parentAdapter log: @"Banner ad failed to show with error: %@", adapterError];
+    [self.delegate didFailToDisplayAdViewAdWithError:adapterError];
 }
 
 @end
