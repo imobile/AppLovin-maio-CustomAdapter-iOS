@@ -1,6 +1,10 @@
 #import "AppLovinMaioMediationAdapter.h"
 #import <Maio/Maio-Swift.h>
 
+// All AppLovin’s adapters use a five-number versioning scheme:
+//   The leftmost four numbers correspond to the network SDK version.
+//   The last number denotes the minor version number, which refers to the adapter release.
+// https://support.axon.ai/ja/max/demand-partners/building-a-custom-adapter
 #define ADAPTER_VERSION @"2.2.0.0.1"
 
 @interface AppLovinMaioMediationAdapterInterstitialAdDelegate : NSObject <MaioInterstitialLoadCallback, MaioInterstitialShowCallback>
