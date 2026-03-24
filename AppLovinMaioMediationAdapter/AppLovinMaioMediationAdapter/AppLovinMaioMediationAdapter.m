@@ -1,7 +1,11 @@
 #import "AppLovinMaioMediationAdapter.h"
 #import <Maio/Maio-Swift.h>
 
-#define ADAPTER_VERSION @"2.2.0.0.0"
+// All AppLovin’s adapters use a five-number versioning scheme:
+//   The leftmost four numbers correspond to the network SDK version.
+//   The last number denotes the minor version number, which refers to the adapter release.
+// https://support.axon.ai/ja/max/demand-partners/building-a-custom-adapter
+#define ADAPTER_VERSION @"2.2.0.0.1"
 
 @interface AppLovinMaioMediationAdapterInterstitialAdDelegate : NSObject <MaioInterstitialLoadCallback, MaioInterstitialShowCallback>
 @property (nonatomic,   weak) AppLovinMaioMediationAdapter *parentAdapter;
@@ -432,8 +436,9 @@
 
 - (void)didFailToLoad:(MaioBannerView *)ad errorCode:(NSInteger)errorCode
 {
-    [self.parentAdapter log: @"Banner ad failed to load with error: %@", errorCode];
-    [self.delegate didFailToLoadAdViewAdWithError:[AppLovinMaioMediationAdapter toMaxError:errorCode]];
+    MAAdapterError *adapterError = [AppLovinMaioMediationAdapter toMaxError:errorCode];
+    [self.parentAdapter log: @"Banner ad failed to load with error: %@", adapterError];
+    [self.delegate didFailToLoadAdViewAdWithError:adapterError];
 }
 
 - (void)didMakeImpression:(MaioBannerView *)ad
@@ -456,8 +461,9 @@
 
 - (void)didFailToShow:(MaioBannerView *)ad errorCode:(NSInteger)errorCode
 {
-    [self.parentAdapter log: @"Banner ad failed to show with error: %@", errorCode];
-    [self.delegate didFailToDisplayAdViewAdWithError:[AppLovinMaioMediationAdapter toMaxError:errorCode]];
+    MAAdapterError *adapterError = [AppLovinMaioMediationAdapter toMaxError:errorCode];
+    [self.parentAdapter log: @"Banner ad failed to show with error: %@", adapterError];
+    [self.delegate didFailToDisplayAdViewAdWithError:adapterError];
 }
 
 @end

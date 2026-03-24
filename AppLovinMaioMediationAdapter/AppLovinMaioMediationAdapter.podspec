@@ -6,7 +6,7 @@
 #  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/
 #
 
-adapter_version = "2.2.0.0.0"
+adapter_version = "2.2.0.0.1"
 
 Pod::Spec.new do |spec|
 
